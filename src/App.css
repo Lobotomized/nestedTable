@@ -1,0 +1,9 @@
+.row{
+  display:flex;
+  flex-direction: row;
+}
+
+.paddingLeft{
+  padding-left:10px;
+}
+
