@@ -1,12 +1,18 @@
-import { NestedTable } from "./NestedTable";
-import { useEffect, useState } from "react";
+import React, { useState } from 'react';
+import { NestedTable } from './NestedTable';
+
 const initialData = [
   { name: 'Sales', verticalLevel: 0, color: 'white', parrent: 'NO' },
   { name: 'Costs', verticalLevel: 1, color: 'red', parrent: 'Sales' },
   { name: 'Net Income', verticalLevel: 2, color: 'green', parrent: 'NO' }
 ];
 
-const transformData = (input) => {
+const initialAdditionalData = [
+  { sales: 3, costs: -1, netincome: 2 },
+  { sales: 5, costs: -1, netincome: 4 }
+];
+
+const transformData = (input, additionalData) => {
   const idMap = {};
   const rootNodes = [];
 
@@ -15,7 +21,8 @@ const transformData = (input) => {
       id: index + 1,
       name: item.name,
       color: item.color,
-      children: []
+      children: [],
+      additionalValues: additionalData.map((data) => data[item.name.toLowerCase().replace(' ', '')] || 0)
     };
     idMap[item.name] = node;
 
@@ -36,28 +43,46 @@ const transformData = (input) => {
 
 const App = () => {
   const [data, setData] = useState(initialData);
-  const [nestedData, setNestedData] = useState(transformData(initialData));
+  const [additionalData, setAdditionalData] = useState(initialAdditionalData);
 
-  useEffect(() => {
-    setNestedData(transformData(data))  
-  }, [data])
   const handleAddItem = (newItem) => {
     setData((prev) => [...prev, newItem]);
   };
-  const handleUpdateItem = (oldName, newName) => {
-    
+
+  const handleUpdateItem = (id, newName) => {
     setData((prev) =>
-      prev.map((item) => (item.name === oldName ? { ...item, name: newName } : item))
+      prev.map((item) => (item.id === id ? { ...item, name: newName } : item))
     );
-    
   };
+
+  const handleAddAdditionalData = (newData) => {
+    setAdditionalData((prev) => [...prev, newData]);
+  };
+
+  const handleEditAdditionalValue = (nodeId, index, newValue) => {
+    setAdditionalData((prev) =>{
+      let temp = [...prev];
+      temp[index][Object.keys(additionalData[0])[nodeId-1]] = newValue;
+      return temp;
+    });
+  };
+
+  const additionalDataKeys = Object.keys(initialAdditionalData[0]);
+  const nestedData = transformData(data, additionalData);
 
   return (
     <div>
       <h1>Nested Table</h1>
-      <NestedTable nodes={nestedData} onUpdate={handleUpdateItem} onAdd={handleAddItem} />
+      <NestedTable 
+        nodes={nestedData} 
+        onAdd={handleAddItem} 
+        onUpdate={handleUpdateItem} 
+        onAddAdditionalData={handleAddAdditionalData} 
+        onEditAdditionalValue={handleEditAdditionalValue}
+        additionalDataKeys={additionalDataKeys}
+      />
     </div>
   );
 };
 
-export default App;
+export default App; 
