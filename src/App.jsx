@@ -7,7 +7,7 @@ const initialData = [
   { name: 'Net Income', verticalLevel: 1, color: 'green', parrent: 'NO' }
 ];
 
-const initialAdditionalData = [
+const initialAdditionalData = localStorage.getItem('reports') ? JSON.parse(localStorage.getItem('reports')) : [
   { sales: 3, costs: -1, netincome: 2 },
   { sales: 5, costs: -1 }
 ];
@@ -57,14 +57,33 @@ const App = () => {
     );
   };
 
+  const removeReport = (index) => {
+    setAdditionalData((reports) => {
+      let tempReports = reports.filter((rep,i) => {
+        return i != index
+      })
+
+      localStorage.setItem('reports', JSON.stringify(tempReports))
+
+      return tempReports
+    })
+  }
+
   const handleAddAdditionalData = (newData) => {
-    setAdditionalData((prev) => [...prev, newData]);
+
+    setAdditionalData((prev) => {
+      let temp = [...prev, newData]
+      localStorage.setItem('reports', JSON.stringify(temp))
+      return temp
+    });
   };
 
   const handleEditAdditionalValue = (nodeId, index, newValue) => {
     setAdditionalData((prev) =>{
       let temp = [...prev];
       temp[index][Object.keys(additionalData[0])[nodeId-1]] = newValue;
+      localStorage.setItem('reports', JSON.stringify(temp))
+
       return temp;
     });
   };
@@ -83,6 +102,8 @@ const App = () => {
         onAddAdditionalData={handleAddAdditionalData} 
         onEditAdditionalValue={handleEditAdditionalValue}
         additionalDataKeys={additionalDataKeys}
+        reports={additionalData}
+        removeReport={removeReport}
       />
     </div>
   );

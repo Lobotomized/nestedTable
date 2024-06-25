@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import React from 'react'
-export const NestedTable = ({ nodes, onAdd, onUpdate, onAddAdditionalData, additionalDataKeys, onEditAdditionalValue }) => {
+export const NestedTable = ({ nodes, onAdd, onUpdate, onAddAdditionalData, additionalDataKeys, onEditAdditionalValue, reports, removeReport }) => {
   const [expandedNodes, setExpandedNodes] = useState({});
   const [formData, setFormData] = useState({
     name: '',
@@ -98,31 +98,35 @@ export const NestedTable = ({ nodes, onAdd, onUpdate, onAddAdditionalData, addit
           <span style={{ cursor: 'pointer' }}>
             {node.name}
           </span>
+          <div>
+          </div>
           <div style={{ marginLeft: '10px' }}>
             {node.additionalValues.map((value, index) => (
-              <span key={index} style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => handleValueClick(node.id, index)}>
-                {editingValue?.nodeId === node.id && editingValue?.index === index ? (
-                   <input
-                    type="number"
-                    value={editName}  
-                    onChange={handleValueChange}
-                    onBlur={() => {
-                      handleEditValueSubmit(node.id, index);
-    
-                      setEditingValue(null);
-                    }}
-                    autoFocus
-                 />
-                ) : (
-                  value
-                )}
-              </span>
+                <span key={index} style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => handleValueClick(node.id, index)}>
+                  {editingValue?.nodeId === node.id && editingValue?.index === index ? (
+                    <input
+                      type="number"
+                      value={editName}  
+                      onChange={handleValueChange}
+                      onBlur={() => {
+                        handleEditValueSubmit(node.id, index);
+      
+                        setEditingValue(null);
+                      }}
+                      autoFocus
+                  />
+                  ) : (
+                    value
+                  )}
+                </span>
             ))}
           </div>
         </div>
         {expandedNodes[node.id] && node.children.length > 0 && (
           <div>{renderNodes(node.children, level + 1)}</div>
         )}
+
+
       </React.Fragment>
     ));
   };
@@ -130,6 +134,16 @@ export const NestedTable = ({ nodes, onAdd, onUpdate, onAddAdditionalData, addit
   return (
     <div>
       {renderNodes(nodes, 0)}
+      <div style={{marginLeft:'10ch'}}>
+        {
+            reports.map((report, index) => {
+              return <button style={{marginLeft:'1ch'}} key={'delte'+index} onClick={() => {
+                removeReport(index)
+              }}>X</button>
+            })
+        }
+      </div>
+
       {/* <h2>Add New Item</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -186,6 +200,7 @@ export const NestedTable = ({ nodes, onAdd, onUpdate, onAddAdditionalData, addit
               onChange={handleAdditionalDataChange}
               required
             />
+
           </div>
         ))}
         <button type="submit">Add Report</button>
