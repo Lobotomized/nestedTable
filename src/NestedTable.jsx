@@ -103,7 +103,7 @@ export const NestedTable = ({ nodes, onAdd, onUpdate, onAddAdditionalData, addit
               <span key={index} style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={() => handleValueClick(node.id, index)}>
                 {editingValue?.nodeId === node.id && editingValue?.index === index ? (
                    <input
-                    type="text"
+                    type="number"
                     value={editName}  
                     onChange={handleValueChange}
                     onBlur={() => {

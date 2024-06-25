@@ -9,7 +9,7 @@ const initialData = [
 
 const initialAdditionalData = [
   { sales: 3, costs: -1, netincome: 2 },
-  { sales: 5, costs: -1, netincome: 4 }
+  { sales: 5, costs: -1 }
 ];
 
 const transformData = (input, additionalData) => {
@@ -22,7 +22,7 @@ const transformData = (input, additionalData) => {
       name: item.name,
       color: item.color,
       children: [],
-      additionalValues: additionalData.map((data) => data[item.name.toLowerCase().replace(' ', '')] || 0)
+      additionalValues: additionalData.map((data) => data[item.name.toLowerCase().replace(' ', '')] || 'EMPTY')
     };
     idMap[item.name] = node;
 
