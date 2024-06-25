@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { NestedTable } from './NestedTable';
 
 const initialData = [
-  { name: 'Sales', verticalLevel: 0, color: 'white', parrent: 'NO' },
-  { name: 'Costs', verticalLevel: 1, color: 'red', parrent: 'Sales' },
-  { name: 'Net Income', verticalLevel: 2, color: 'green', parrent: 'NO' }
+  { name: 'Sales', verticalLevel:2, color: 'white', parrent: 'NO' },
+  { name: 'Costs', verticalLevel: 3, color: 'red', parrent: 'Sales' },
+  { name: 'Net Income', verticalLevel: 1, color: 'green', parrent: 'NO' }
 ];
 
 const initialAdditionalData = [
@@ -35,7 +35,9 @@ const transformData = (input, additionalData) => {
       }
     }
   });
-
+  rootNodes.sort((a,b) => {
+    return a.verticalLevel - b.verticalLevel
+  })
   return rootNodes;
 };
 
@@ -66,7 +68,8 @@ const App = () => {
       return temp;
     });
   };
-
+  
+  
   const additionalDataKeys = Object.keys(initialAdditionalData[0]);
   const nestedData = transformData(data, additionalData);
 
