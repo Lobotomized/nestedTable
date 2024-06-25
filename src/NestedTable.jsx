@@ -174,7 +174,7 @@ export const NestedTable = ({ nodes, onAdd, onUpdate, onAddAdditionalData, addit
         </div>
         <button type="submit">Add Item</button>
       </form> */}
-      <h2>Add Additional Data</h2>
+      <h2>Add Report</h2>
       <form onSubmit={handleAdditionalDataSubmit}>
         {additionalDataKeys.map((key) => (
           <div key={key}>
@@ -188,7 +188,7 @@ export const NestedTable = ({ nodes, onAdd, onUpdate, onAddAdditionalData, addit
             />
           </div>
         ))}
-        <button type="submit">Add Additional Data</button>
+        <button type="submit">Add Report</button>
       </form>
     </div>
   );
