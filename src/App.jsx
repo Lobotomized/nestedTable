@@ -88,8 +88,13 @@ const App = () => {
     });
   };
   
+  let tmpObject = [];
+
+  initialData.forEach((report) => {
+    tmpObject.push(report.name.toLowerCase().replace(' ', ''))
+  })
   
-  const additionalDataKeys = Object.keys(initialAdditionalData[0]);
+  const additionalDataKeys = [...tmpObject];
   const nestedData = transformData(data, additionalData);
 
   return (
